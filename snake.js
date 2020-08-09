@@ -1,19 +1,19 @@
-// as variáveis de "saída"
+// the "output" variables
 var canvas;
 var context;
 
-// as variáveis do jogo
-var state = 0; // estado do jogo
-var TILESIZE; // tamanho dos "tiles", apenas para desenhar na tela
-var pieces; // a cobra
-var apple; // a maçã
-var keyUp, keyRight, keyDown, keyLeft; // teclas pressionadas ou soltas
-var UP, DOWN, LEFT, RIGHT; // direção da cobra
-var velX, velY; // velocidade nos eixos
-var collision; // indica colisão da cabeça com alguma parte da cobra
-var mapWidth, mapHeight; // dimensão do "mapa"
+// the game variables
+var state = 0; // game state
+var TILESIZE; // size of the tiles, just to draw on the screen
+var pieces; // the snake
+var apple; // the apple
+var keyUp, keyRight, keyDown, keyLeft; // keys pressed or released
+var UP, DOWN, LEFT, RIGHT; // snake direction
+var velX, velY; // axle speed
+var collision; // indicates head collision with some part of the snake
+var mapWidth, mapHeight; // "map" dimension
 
-// as imagens
+// the images
 var imgApple;
 var imgPiece;
 var imgHead;
@@ -73,19 +73,19 @@ function keyboardDown ( event )
 
 	switch (ev.keyCode)
 	{
-		case 37: // seta esquerda
+		case 37: // left arrow
 			keyLeft = true;
 			break;
-		case 38: // seta para cima
+		case 38: // up arrow
 			keyUp = true;
 			break;
-		case 39: // seta direita
+		case 39: // right arrow
 			keyRight = true;
 			break;
-		case 40: // seta para baixo
+		case 40: // down arrow
 			keyDown = true;
 			break;
-		case 80: // tecla p = pause game
+		case 80: // p key = pause game
 			velX = velY = 0;
 			break;
 		default:
@@ -99,16 +99,16 @@ function keyboardUp ( event )
 
 	switch (ev.keyCode)
 	{
-		case 37: // seta esquerda
+		case 37: // left arrow
 			keyLeft = false;
 			break;
-		case 38: // seta para cima
+		case 38: // up arrow
 			keyUp = false;
 			break;
-		case 39: // seta direita
+		case 39: // right arrow
 			keyRight = false;
 			break;
-		case 40: // seta para baixo
+		case 40: // down arrow
 			keyDown = false;
 			break;
 		default:
@@ -134,75 +134,75 @@ function gameInit (  )
 	apple.id = -10;
 	velX = velY = 0;
 	collision = false;
-	// direções a seguir
+	// directions to follow
 	UP = 0;
 	RIGHT = 1;
 	DOWN = 2;
 	LEFT = 3;
 
-	// inicializando a parte A - a cabeça
+	// initializing part A - the head
 	pieces[2].id = 2;
 	pieces[2].x = 3;
 	pieces[2].y = 3;
 	pieces[2].dir = RIGHT;
 
-	// inicializando a parte B
+	// initializing part B
 	pieces[1].id = 1;
 	pieces[1].x = 2;
 	pieces[1].y = 3;
 	pieces[1].dir = RIGHT;
 
-	// inicializando a parte C - o rabo
+	// initializing part C - the tail
 	pieces[0].id = 0;
 	pieces[0].x = 1;
 	pieces[0].y = 3;
 	pieces[0].dir = RIGHT;
 
-	// escolhe as coordenadas da maçã
+	// choose the coordinates of the apple
 	apple.randomPos();
 
-	// por fim seta o estado para 1
+	// finally set the state to 1
 	state = 1;
 	
-	// atualiza o tamnho atual na pagina html
+	// updates the current size on the HTML page
 	document.getElementById("currSize").innerHTML = pieces.length;
-	// atualiza o tamanho anterior na pagina html
+	// updates the previous size on the HTML page
 	document.getElementById("lastSize").innerHTML = 0;
 }
 
 function gameReset (  )
 {
-	// atualiza o tamanho anterior na pagina html
+	// updates the previous size on the HTML page
 	document.getElementById("lastSize").innerHTML = pieces.length;
 
-	// retira o excesso de elementos deixa só 3 pra reiniciar
+	// remove excess elements leaves only 3 to restart
 	while (pieces.length > 3)
 		pieces.pop();
 
 	velX = velY = 0;
 	collision = false;
 
-	// reinicializando as peças
-	// inicializando a parte A - a cabeça
+	// resetting the parts
+    // initializing part A - the head
 	pieces[2].id = 2;
 	pieces[2].x = 3;
 	pieces[2].y = 3;
 	pieces[2].dir = RIGHT;
 
-	// inicializando a parte B
+	// initializing part B
 	pieces[1].id = 1;
 	pieces[1].x = 2;
 	pieces[1].y = 3;
 	pieces[1].dir = RIGHT;
 
-	// inicializando a parte C - o rabo
+	// initializing part C - the tail
 	pieces[0].id = 0;
 	pieces[0].x = 1;
 	pieces[0].y = 3;
 	pieces[0].dir = RIGHT;
 
 	apple.randomPos();
-	// atualiza o tamnho atual na pagina html
+	// updates the current size on the HTML page
 	document.getElementById("currSize").innerHTML = pieces.length;
 }
 
@@ -245,7 +245,7 @@ function gameLoop (  )
 		}
 	}
 
-	// atualiza as posições das pieces se estiver movendo
+	// updates the positions of the pieces if you are moving
 	if (velX != 0 || velY != 0)
 	{
 		for (var i=0; i < pieces.length - 1; i++)
@@ -265,16 +265,16 @@ function gameLoop (  )
 		pieces[pieces.length - 1].id = pieces.length - 1;
 		apple.randomPos();
 		
-		// atualiza o tamanho atual na pagina html
+		// updates the current size on the HTML page
 		document.getElementById("currSize").innerHTML = pieces.length;
 	}
 
-	// agora move a cabeça
+	// now move your head
 	pieces[pieces.length - 1].x += velX;
 	pieces[pieces.length - 1].y += velY;
 
-	// depois de mover a cabeça limita o movimento no canvas
-	// Para o eixo X
+	// after moving the head limits the movement on the canvas
+    // For the X axis
 	if (pieces[pieces.length - 1].x >= mapWidth)
 	{
 		pieces[pieces.length - 1].x = 0;
@@ -284,7 +284,7 @@ function gameLoop (  )
 		pieces[pieces.length - 1].x = mapWidth - 1;
 	}
 	
-	// Para o eixo Y
+	// Para o Y axis
 	if (pieces[pieces.length - 1].y >= mapHeight)
 	{
 		pieces[pieces.length - 1].y = 0;
@@ -294,13 +294,13 @@ function gameLoop (  )
 		pieces[pieces.length - 1].y = mapHeight - 1;
 	}
 
-	// se colidiu com alguma parte da cobra
+	// if it collided with any part of the snake
 	if (collision)
 	{
 		gameReset();
 	}
 
-	// verifica se colidiu com alguma parte da cobra
+	// checks if it collided with any part of the snake
 	for (var i=0; i < pieces.length - 2 && !collision; i++)
 		if (pieces[pieces.length - 1].x == pieces[i].x && pieces[pieces.length - 1].y == pieces[i].y)
 			collision = true;
@@ -308,12 +308,12 @@ function gameLoop (  )
 	context.fillStyle = "#FFFFFF";
 	context.fillRect(0,0,canvas.width,canvas.height);
 	
-	// desenha o corpo da cobra (sem a cabeça)
+	// draws the snake's body (without the head)
 	for (var i=0; i < pieces.length - 1; i++)
 		pieces[i].draw(imgPiece);
-	// desenha a maçã
+	// draw the apple
 	apple.draw(imgApple);
-	// desenha a cabeça
+	// draw the head
 	pieces[pieces.length - 1].draw(imgHead);
 }
 
